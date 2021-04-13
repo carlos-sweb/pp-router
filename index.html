@@ -8,91 +8,41 @@
 <body>
 
 <ul>
-	<li><a href="#/">Incio</a></li>
-	<li><a href="#/nosotros">Nosotros</a></li>
-	<li><a href="#/sair">Nosotros</a></li>
+	<li><a href="#/">Incio</a></li>	
+</ul>
+
+
+<ul>
+	<li><a href="#/verdura/manzana/1">Manzana</a></li>	
+	<li><a href="#/verdura/pera/20">pera</a></li>	
+	<li><a href="#/verdura/sandia/2">sandia</a></li>	
 </ul>
 
 <div id="root" ></div>
 
+<script type="text/javascript" src="pp-router.js" ></script>
 <script type="text/javascript">
 
 	var root = document.getElementById("root");
 
-	var ppRouter = function( routes ){
-
-			// Cached regex for stripping a leading hash/slash and trailing space.
-			var routeStripper = /^[#\/]|\s+$/g;
-
-			// Cached regex for stripping leading and trailing slashes.
-			var rootStripper = /^\/+|\/+$/g;
-
-			// Cached regex for stripping urls of hash.
-			var pathStripper = /#.*$/;
-
-			this.routes = routes;
-			this.history = window.history;
-			this.location = window.location;
-
-			window.addEventListener('hashchange',function(){ this.run() }.bind(this));
-
-			window.addEventListener('popstate',function(){
-				console.log("Escuchando popstate");
-			})
-
-			this.run = function(){
-				var hash = this.location.hash.trim().replace("#","");
-				if(hash === ""){hash = hash+"/";this.location.hash = "/";}
-
-				
-					
-				const keys = Object.keys( routes);
-				for( var i = 0; i < keys.length ; i++ ){
-					
-					console.log("------------------------------------------------");
-					console.log( keys[i].match( /^[#\/]|\s+$/g	 ) );
-					console.log( keys[i].match( /^\/+|\/+$/g ) );
-					console.log( keys[i].match( /(\(\?)?:\w+/g ) );				
-					
-					console.log("------------------------------------------------");
-
-
-					if( hash == keys[i] ){
-						this.routes[keys[i]].controller();
-					}
-				} 
-
-			}
-
-			this.start = function(url){
-				if( typeof url == "string" ){
-					this.location.hash = url;
-				}
-				this.run();			
-			}		
-	}
-
 	var router = new ppRouter({
-		"/:algo":{
-			controller:function( options ){
-				console.log( options );
-				root.innerHTML = "<h1>Hello : #/</h1>";
+		"/":{
+			controller:function(){
+				root.innerHTML = `<h1>Home</h1>`;
 			}
 		},
-		"/hola/:name":{
-			controller:function(){
-				root.innerHTML = "<h1>Hola : #/</h1>";	
+
+		"/verdura/:name(string)/:id(number)":{
+			controller:function( params ){				
+				root.innerHTML = `<h1>Producto ${params.name} : ${params.id} </h1>`;	
 			}
-		},
-		"/static/static":{
-			controller:function(){
-				root.innerHTML = "<h1>Hola : soy estatico</h1>";	
-			}
-		}	
+		}
 	});
 	
-	router.start();
+	router.redirect("/");
 
+	router.start();
+	
 </script>	
 </body>
 </html>
