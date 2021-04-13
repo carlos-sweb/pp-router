@@ -32,12 +32,10 @@
 
 			window.addEventListener('hashchange',function(){ this.run() }.bind(this));
 
-
 			this.notFound = function( done ){
 				if( typeof done == 'function'){
 					done.bind(this)();	
 				}
-				
 			}
 
 			this.redirect = function( url_redirect ){
@@ -121,14 +119,9 @@
 			}
 
 			this.start = function(url){
-				if( typeof url == "string" ){
-					this.location.hash = url;
-				}
-				this.run();			
-			}	
-
-
-
+				if( typeof url == "string" ){ this.location.hash = url; }
+				this.run();
+			}
 	}			
 //--------------------	
 }));		

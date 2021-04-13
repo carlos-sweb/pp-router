@@ -10,21 +10,15 @@
 <ul>
 	<li><a href="#/">Incio</a></li>	
 </ul>
-
-
 <ul>
 	<li><a href="#/verdura/manzana/1">Manzana</a></li>	
 	<li><a href="#/verdura/pera/20">pera</a></li>	
 	<li><a href="#/verdura/sandia/2">sandia</a></li>	
 </ul>
-
 <div id="root" ></div>
-
-<script type="text/javascript" src="pp-router.js" ></script>
+<script type="text/javascript" src="pp-router.min.js" ></script>
 <script type="text/javascript">
-
 	var root = document.getElementById("root");
-
 	var router = new ppRouter({
 		"/":{
 			controller:function(){
@@ -38,11 +32,8 @@
 			}
 		}
 	});
-	
 	router.redirect("/");
-
-	router.start();
-	
+	router.start();	
 </script>	
 </body>
 </html>
