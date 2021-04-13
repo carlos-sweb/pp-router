@@ -16,7 +16,7 @@
 	<li><a href="#/verdura/sandia/2">sandia</a></li>	
 </ul>
 <div id="root" ></div>
-<script type="text/javascript" src="pp-router.min.js" ></script>
+<script type="text/javascript" src="pp-router.js?v=swuduedue" ></script>
 <script type="text/javascript">
 	var root = document.getElementById("root");
 	var router = new ppRouter({
@@ -31,8 +31,9 @@
 				root.innerHTML = `<h1>Producto ${params.name} : ${params.id} </h1>`;	
 			}
 		}
-	});
-	router.redirect("/");
+	});	
+
+
 	router.start();	
 </script>	
 </body>

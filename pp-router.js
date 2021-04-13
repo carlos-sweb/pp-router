@@ -22,52 +22,90 @@
 
 	return function(routes){
 
-			this.routes = routes;
-
-			this.history = window.history;
-
-			this.location = window.location;
-
-			this.params = null;
-
-			window.addEventListener('hashchange',function(){ this.run() }.bind(this));
-
-			this.notFound = function( done ){
-				if( typeof done == 'function'){
-					done.bind(this)();	
-				}
+			function isFunction(func) {
+				return func && {}.toString.call(func) === '[object Function]';
 			}
+		
+			/**
+			*@name routes
+			*@description : contenedor de roeuter provistos por el usuario
+			*/
+			this.routes = routes;
+			/*
+			*@history
+			*/
+			this.history = window.history;
+			/*
+			*@location
+			*/
+			this.location = window.location;
+			/*
+			*@params
+			*@description - Objecto que contiene si existen parametros en la url
+			*/
+			this.params = null;
+			// EVENTO QUE QUEDA ESCUCHANDO LOS CAMBIOS DE URL 
+			window.addEventListener('hashchange',function(){ this.run() }.bind(this));			
 
+			/*
+			*@name redirect
+			*/
 			this.redirect = function( url_redirect ){
 				this.url_redirect = url_redirect;
 			}
-		
+			/*
+			*@name run
+			*@type Function
+			*@description  funcion que inicializa la primara
+			*verificacion de url			
+			*/
 			this.run = function(){
-				
-				var hash = this.location.hash;
-				
-				if(hash === ""){hash = hash+"/";this.location.hash = "/";}
-
+				//una referencia local para el hash
+				var hash = this.location.hash;				
+				// validamos que el hash no entre vacio
+				if(hash === ""){
+					hash = hash+"/";
+					this.location.hash = "/";
+				}
+				// estramemos todas las llaves del router, 
+				// vendian siendo la url a analizar
 				const keys = Object.keys( routes);
 
 				for( var i = 0; i < keys.length ; i++ ){
+					
+					// VERIFICAMOS QUE HALLA UNA COINCIDENCIA
 					const check = this.checkHash(hash,keys[i]);
-					if( check ){
+					// EN EL CASO QUE HALLA UNA CONCIDENCIA Y ADEMAS 
+					// SE HALLA PROPORCIONADO UN CONTROLADOR PARA ESTA URL
+					// SERA EJECUTADO CON LOS PARAMETROS CAPTURADOS
+					if( check && isFunction(this.routes[keys[i]].controller) ){
 						this.routes[keys[i]].controller( this.params );
 						break;
 					}
+					// LLEGAMOS HA ESTE PUNTO CUANDO NO HEMOS 
+					// NO HEMOS HALLADO NINGUNA COINCIDENCIA
+					//ES UN ESTADO noFound
 					if( (i+1) == keys.length ){
-						this.location.hash = this.url_redirect;
+						if( typeof this.url_redirect == "string" ){
+							this.location.hash = this.url_redirect;
+						}
 					}
-				} 
+
+				}
 
 			}
-
+			/*
+			*@name checkHash
+			*@type Function
+			*@description 
+			*/
 			this.checkHash = function( hash , pattern ){
-
-				if( hash.replace("#","") == pattern ){ return true; };
+				
+				//VALIDAMOS QUE LAS URL VENGAN EXACTAS - OMITIMOS URL QUE VENGAN CON PREFIGOS
+				if( hash.replace("#","") == pattern && pattern.indexOf(":") == -1 ){ return true; };
 
 				const regex = /\/[(\:)]{1}([a-z,A-Z,0-9,\-,\_]{0,})[\(](string|any|number)[\)]/g;				
+				
 				var p = new RegExp( regex );
 
 				var prueba = `^#\\`+pattern;
