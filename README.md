@@ -40,20 +40,25 @@ Simple Router for you Apps Client-Side
 ```
 
 ```javascript
+// Declare root html element
+var root = document.getElementById("root");
+
 // Declare router here
-var router = new ppRouter({
-        // How to use it ?
-		"/":{
-			controller:function(){
-				root.innerHTML = `<h1>Home</h1>`;
-			}
-		},
-		"/route-remove":{
-			controller:function(){
-				root.innerHTML = `<h1>Route Remove</h1>`;
-			}
-		}	
-	});	
+var router = new ppRouter(
+    // How to use it ?
+    {
+    "/":{
+        controller:function(){
+            root.innerHTML = `<h1>Home</h1>`;
+        }
+    },
+    "/route-remove":{
+        controller:function(){
+            root.innerHTML = `<h1>Route Remove</h1>`;
+        }
+    }	
+    }
+);	
 
 // If you want to add another router
 router.addRoute("/vegetables/:name(string)/:id(number)",
