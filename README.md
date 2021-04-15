@@ -87,3 +87,34 @@ router.start();
 ```
 
 ## Methods
+
+### router 
+
+You can write exact routers, that's easy.
+
+but if you need dynamic routers do it as follows
+/customer/:id(number)
+/customer/:namecustomer(string)/:id(number)
+/customer/:nameAndId(any)
+
+there are three ways to get it :nameMyVar(number) , :nameMyVar(string) , :nameMyVar(any)
+
+### addRoute
+
+receives the name of the url and its object, see the example above 
+
+### removeRoute
+
+removes routing according to url
+
+### redirect 
+
+set a url for unmatched urls 
+
+### noFound 
+
+creates a function to execute in case of url mismatches
+
+### start 
+
+Function that initializes the analizis, you can also set a base url

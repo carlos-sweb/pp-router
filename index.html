@@ -11,9 +11,9 @@
 	<li><a href="#/">Incio</a></li>	
 </ul>
 <ul>
-	<li><a href="#/vegetables/manzana/1">Manzana</a></li>	
-	<li><a href="#/vegetables/pera/20">pera</a></li>	
-	<li><a href="#/vegetables/sandia/2">sandia</a></li>	
+	<li><a href="#/vegetables/artichokes/1">Artichokes</a></li>	
+	<li><a href="#/vegetables/onion/20">Onion</a></li>	
+	<li><a href="#/vegetables/carrots/2">Carrots</a></li>	
 </ul>
 <div id="root" ></div>
 <script type="text/javascript" src="pp-router.js?v=swuduedue" ></script>
@@ -36,7 +36,7 @@
 	router.addRoute("/vegetables/:name(string)/:id(number)",
 		{
 			controller:function( params ){				
-				root.innerHTML = `<h1>Producto ${params.name} : ${params.id} </h1>`;	
+				root.innerHTML = `<h1>vegetables ${params.name} : ${params.id} </h1>`;	
 			}
 		}
 	);
