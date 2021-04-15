@@ -162,9 +162,7 @@
 
 				}
 				// AGREGAMOS $ PARA DETERMINAR LA EXPRESION REGULAR EXACTA
-				contructRegexp = contructRegexp +`$`;
-
-				console.log(contructRegexp);
+				contructRegexp = contructRegexp +`$`;				
 				//YA ESTA CONSTRUIDA LA EXPRESION REGULAR PARA USAR								
 				var FinalRegexp = new RegExp(contructRegexp);					
 				// OBTENEMOS EL RESULTADO - SABEMOS QUE ES SOLO 1 SIN GRUPOS 
