@@ -1,7 +1,7 @@
 /*!!
  * Power Panel Router <https://github.com/carlos-sweb/pp-router>
  * @author Carlos Illesca
- * @version 1.0.1 (2020/04/12 21:29 PM)
+ * @version 1.0.2 (2020/04/15 00:46 AM)
  * Released under the MIT License
  */
 (function(global , factory ){
@@ -134,13 +134,12 @@
 			this.checkHash = function( hash , pattern ){
 				//VALIDAMOS QUE LAS URL VENGAN EXACTAS - OMITIMOS URL QUE VENGAN CON PREFIGOS
 				if( hash.replace("#","") == pattern && pattern.indexOf(":") == -1 ){return true;};
-				// EXPRESION REGULAR
-				//\/[(\:)]{1}([a-z,A-Z,0-9,\-,\_]{0,})[\(](string|any|number?([,]{1}min\:[1-9]{1}[0-9]{0,}|[,]{1}max\:[1-9]{1}[0-9]{0,})[,]{0,1})[\)]
+				// EXPRESION REGULAR				
 				const regex = /\/[(\:)]{1}([a-z,A-Z,0-9,\-,\_]{0,})[\(](string|any|number)[\)]/g;				
 				// se inicia la expresion regular
 				var regexp = new RegExp( regex );
-				// empezamos a crear un regexp en base a los parametros añadidos en el match
-				var contructRegexp = `^#\\`+pattern;
+				// empezamos a crear un regexp en base a los parametros añadidos en el match								
+				var contructRegexp = `^#`+pattern;				
 				// vamos a volcar en un grupo todos 
 				// los aciertos o coincidencias
 				var group = [];
@@ -151,19 +150,21 @@
 					group.push(ExecTemp);
 					switch( ExecTemp[2] ){
 						case "number":								
-							contructRegexp = contructRegexp.replace(ExecTemp[0],`\\/([0-9]{1,})`);
+							contructRegexp = contructRegexp.replace(ExecTemp[0],`[\\/]{1}([0-9]{1,})`);
 						break;
 						case "any":
-							contructRegexp = contructRegexp.replace(ExecTemp[0],`\\/([0-9A-Za-z]{1,})`);
+							contructRegexp = contructRegexp.replace(ExecTemp[0],`[\\/]{1}([0-9A-Za-z]{1,})`);
 						break;
 						case "string":
-							contructRegexp = contructRegexp.replace(ExecTemp[0],`\\/([A-Za-z]{1,})`);
+							contructRegexp = contructRegexp.replace(ExecTemp[0],`[\\/]{1}([A-Za-z]{1,})`);
 						break;
 					}
 
 				}
 				// AGREGAMOS $ PARA DETERMINAR LA EXPRESION REGULAR EXACTA
 				contructRegexp = contructRegexp +`$`;
+
+				console.log(contructRegexp);
 				//YA ESTA CONSTRUIDA LA EXPRESION REGULAR PARA USAR								
 				var FinalRegexp = new RegExp(contructRegexp);					
 				// OBTENEMOS EL RESULTADO - SABEMOS QUE ES SOLO 1 SIN GRUPOS 

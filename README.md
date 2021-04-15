@@ -12,7 +12,7 @@ check the <a href="https://pp-router.netlify.app">Example</a>
 In the web project include pp-router.js with:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pp-router.js@1.0.1/pp-router.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/pp-router.js@1.0.2/pp-router.min.js" ></script>
 ```
 
 Or 
