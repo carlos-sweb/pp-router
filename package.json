@@ -1,0 +1,24 @@
+{
+  "name": "pp-router.js",
+  "version": "1.0.0",
+  "description": "Simple Router for javascript",
+  "main": "pp-router.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlos-sweb/pp-router.git"
+  },
+  "keywords": [
+    "router",
+    "javascript",
+    "jsrouter"
+  ],
+  "author": "Carlos Illesca",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/carlos-sweb/pp-router/issues"
+  },
+  "homepage": "https://github.com/carlos-sweb/pp-router#readme"
+}

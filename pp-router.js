@@ -15,13 +15,18 @@
     var exports = global.ppRouter = factory();    
 
 	}()
-	
+
 ));
 
 })( this,(function() {
 
 	return function(routes){
-
+			/*
+			*@name isFunction
+			*@type Function
+			*@description es una funcion que verifica is el parametro
+			*entregado es una funcion
+			*/
 			function isFunction(func) {
 				return func && {}.toString.call(func) === '[object Function]';
 			}
@@ -30,7 +35,32 @@
 			*@name routes
 			*@description : contenedor de roeuter provistos por el usuario
 			*/
-			this.routes = routes;
+			this.routes = routes || {};
+			/*
+			*@name addRoute
+			*@type Function
+			*@description Agrega un route al listado
+			*/
+			this.addRoute = function( pattern , object){
+				 this.routes[pattern] = object;
+			}
+			/*
+			*@name removeRoute
+			*@type Function
+			*@description - remueve un route al listado
+			*/
+			this.removeRoute = function( pattern ){
+				
+				var keys = Object.keys(this.routes);
+
+				for( var i = 0; i < keys.length ; i++  ){
+					if( keys[i] == pattern ){
+						delete this.routes[pattern];
+						break;
+					}
+				}
+
+			}
 			/*
 			*@history
 			*/
@@ -86,6 +116,8 @@
 					// NO HEMOS HALLADO NINGUNA COINCIDENCIA
 					//ES UN ESTADO noFound
 					if( (i+1) == keys.length ){
+						// si esta la funcion noFound se ejecuta
+						if( isFunction(this.noFound) ){ this.noFound( this.location );  }
 						if( typeof this.url_redirect == "string" ){
 							this.location.hash = this.url_redirect;
 						}
@@ -100,62 +132,68 @@
 			*@description 
 			*/
 			this.checkHash = function( hash , pattern ){
-				
 				//VALIDAMOS QUE LAS URL VENGAN EXACTAS - OMITIMOS URL QUE VENGAN CON PREFIGOS
-				if( hash.replace("#","") == pattern && pattern.indexOf(":") == -1 ){ return true; };
-
+				if( hash.replace("#","") == pattern && pattern.indexOf(":") == -1 ){return true;};
+				// EXPRESION REGULAR
+				//\/[(\:)]{1}([a-z,A-Z,0-9,\-,\_]{0,})[\(](string|any|number?([,]{1}min\:[1-9]{1}[0-9]{0,}|[,]{1}max\:[1-9]{1}[0-9]{0,})[,]{0,1})[\)]
 				const regex = /\/[(\:)]{1}([a-z,A-Z,0-9,\-,\_]{0,})[\(](string|any|number)[\)]/g;				
-				
-				var p = new RegExp( regex );
-
-				var prueba = `^#\\`+pattern;
-
+				// se inicia la expresion regular
+				var regexp = new RegExp( regex );
+				// empezamos a crear un regexp en base a los parametros añadidos en el match
+				var contructRegexp = `^#\\`+pattern;
+				// vamos a volcar en un grupo todos 
+				// los aciertos o coincidencias
 				var group = [];
-
-				let m ;
-
-				while( ( m = p.exec(pattern) ) != null ){
-					group.push(m);
-					switch( m[2] ){
+				// VARIABLE TEMPORAL
+				var ExecTemp;
+				// PROCESO DE CAPTURA DE LOS GRUPOS
+				while( ( ExecTemp = regexp.exec(pattern) ) != null ){
+					group.push(ExecTemp);
+					switch( ExecTemp[2] ){
 						case "number":								
-							prueba = prueba.replace(m[0],`\\/([0-9]{1,})`);
+							contructRegexp = contructRegexp.replace(ExecTemp[0],`\\/([0-9]{1,})`);
 						break;
 						case "any":
-							prueba = prueba.replace(m[0],`\\/([A-Z,a-z,0-9]{1,})`);
+							contructRegexp = contructRegexp.replace(ExecTemp[0],`\\/([0-9A-Za-z]{1,})`);
 						break;
 						case "string":
-							prueba = prueba.replace(m[0],`\\/([a-z,A-Z]{1,})`);
+							contructRegexp = contructRegexp.replace(ExecTemp[0],`\\/([A-Za-z]{1,})`);
 						break;
 					}
 
 				}
-
-				prueba = prueba+`$`;
-								
-				var aaa = new RegExp(prueba);					
-
-				var result = aaa.exec(hash);
-
+				// AGREGAMOS $ PARA DETERMINAR LA EXPRESION REGULAR EXACTA
+				contructRegexp = contructRegexp +`$`;
+				//YA ESTA CONSTRUIDA LA EXPRESION REGULAR PARA USAR								
+				var FinalRegexp = new RegExp(contructRegexp);					
+				// OBTENEMOS EL RESULTADO - SABEMOS QUE ES SOLO 1 SIN GRUPOS 
+				var result = FinalRegexp.exec(hash);
+				// 
 				if(  !(result == null)  ){ 
-
+					// ESTOS SON LOS PARAMTEROS A DEVOLVER 
+					// EN LA FUNCION
 					var params = new Object();
-
+					//CAPTURAMOS EL VALOR DEL PARAMTRO 
+					//COMO VARIABLE
 					group.forEach((g,i)=>{
 						params[g[1]] = result[(i+1)];
-
 					});
-										
-
+					//CREAMOS LOS PARAMS EN LOS PARAM GLOBALES					
 					this.params = params;
-
+					// DEVOLVEMOS TRUE , ES CORRECTO
 					return true;
 				}else{
+					// ANULAMOS CUALQUIER PARAMS QUE SE HALLA QUEDADO
 					this.params = null;
 				}				
-
+				// retornamos falso
 				return false;
 			}
-
+			/*
+			*@name start
+			*@type Function
+			*@description - Esta funcion 
+			*/
 			this.start = function(url){
 				if( typeof url == "string" ){ this.location.hash = url; }
 				this.run();

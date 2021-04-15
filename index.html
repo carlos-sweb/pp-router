@@ -11,9 +11,9 @@
 	<li><a href="#/">Incio</a></li>	
 </ul>
 <ul>
-	<li><a href="#/verdura/manzana/1">Manzana</a></li>	
-	<li><a href="#/verdura/pera/20">pera</a></li>	
-	<li><a href="#/verdura/sandia/2">sandia</a></li>	
+	<li><a href="#/vegetables/manzana/1">Manzana</a></li>	
+	<li><a href="#/vegetables/pera/20">pera</a></li>	
+	<li><a href="#/vegetables/sandia/2">sandia</a></li>	
 </ul>
 <div id="root" ></div>
 <script type="text/javascript" src="pp-router.js?v=swuduedue" ></script>
@@ -25,14 +25,26 @@
 				root.innerHTML = `<h1>Home</h1>`;
 			}
 		},
+		"/otro":{
+			controller:function(){
+				root.innerHTML = `<h1>Otro</h1>`;
+			}
+		}	
+	});	
 
-		"/verdura/:name(string)/:id(number)":{
+
+	router.addRoute("/vegetables/:name(string)/:id(number)",
+		{
 			controller:function( params ){				
 				root.innerHTML = `<h1>Producto ${params.name} : ${params.id} </h1>`;	
 			}
 		}
-	});	
+	);
 
+
+	router.removeRoute("/otro");
+
+	router.redirect("/");
 
 	router.start();	
 </script>	
