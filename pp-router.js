@@ -1,7 +1,7 @@
 /*!!
  * Power Panel Router <https://github.com/carlos-sweb/pp-router>
  * @author Carlos Illesca
- * @version 1.0.2 (2020/04/15 00:46 AM)
+ * @version 1.0.3 (2020/04/15 00:46 AM)
  * Released under the MIT License
  */
 (function(global , factory ){
@@ -150,19 +150,21 @@
 					group.push(ExecTemp);
 					switch( ExecTemp[2] ){
 						case "number":								
-							contructRegexp = contructRegexp.replace(ExecTemp[0],`[\\/]{1}([0-9]{1,})`);
+							contructRegexp = contructRegexp.replace(ExecTemp[0],`/([0-9]{1,})`);
 						break;
 						case "any":
-							contructRegexp = contructRegexp.replace(ExecTemp[0],`[\\/]{1}([0-9A-Za-z]{1,})`);
+							contructRegexp = contructRegexp.replace(ExecTemp[0],`/([0-9A-Za-z]{1,})`);
 						break;
 						case "string":
-							contructRegexp = contructRegexp.replace(ExecTemp[0],`[\\/]{1}([A-Za-z]{1,})`);
+							contructRegexp = contructRegexp.replace(ExecTemp[0],`/([A-Za-z]{1,})`);
 						break;
 					}
 
 				}
-				// AGREGAMOS $ PARA DETERMINAR LA EXPRESION REGULAR EXACTA
-				contructRegexp = contructRegexp +`$`;				
+				// AGREGAMOS $ PARA DETERMINAR LA EXPRESION REGULAR EXACTA				
+
+				contructRegexp = contructRegexp.replaceAll(`/`,`[\\/]{1}`);
+				contructRegexp = contructRegexp +`$`;
 				//YA ESTA CONSTRUIDA LA EXPRESION REGULAR PARA USAR								
 				var FinalRegexp = new RegExp(contructRegexp);					
 				// OBTENEMOS EL RESULTADO - SABEMOS QUE ES SOLO 1 SIN GRUPOS 
