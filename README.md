@@ -4,7 +4,7 @@
 npm i pp-router.js --save
 ```
 
-check the <a href="https://pp-router.netlify.app">Documentation</a>
+check the <a href="https://pp-router.netlify.app">Example</a>
 
 
 ## Getting Started
@@ -12,7 +12,7 @@ check the <a href="https://pp-router.netlify.app">Documentation</a>
 In the web project include pp-router.js with:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pp-router.js@1.0.0/pp-router.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/pp-router.js@1.0.1/pp-router.min.js" ></script>
 ```
 
 Or 
