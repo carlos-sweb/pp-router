@@ -4,7 +4,7 @@
   "description": "Simple Router for javascript",
   "main": "pp-router.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "terser --output pp-router.min.js --compress --mangle -- pp-router.js"
   },
   "repository": {
     "type": "git",

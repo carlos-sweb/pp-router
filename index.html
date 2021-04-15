@@ -3,20 +3,37 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 	<title>pp-router</title>
 </head>
 <body>
+<nav class="navbar" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand">
+		<h1 class="title is-3">pp-router.js</h1>
+	</div>
+</nav>
+<div class="container" >
+	<div class="columns">
+		<aside class="menu column is-one-quarter" >
+			<p class="menu-label">General</p>
+			<ul class="menu-list">
+				<li><a href="#/home">Home</a></li>		
+			</ul>
+			<p class="menu-label">vegetables</p>
+			<ul class="menu-list">
+				<li><a href="#/vegetables/artichokes/1">Artichokes</a></li>	
+				<li><a href="#/vegetables/onion/20">Onion</a></li>	
+				<li><a href="#/vegetables/carrots/2">Carrots</a></li>			
+			</ul>
+				
+			</aside>
+		<div id="root" class="column" ></div>
+	</div>
+</div>
 
-<ul>
-	<li><a href="#/">Incio</a></li>	
-</ul>
-<ul>
-	<li><a href="#/vegetables/artichokes/1">Artichokes</a></li>	
-	<li><a href="#/vegetables/onion/20">Onion</a></li>	
-	<li><a href="#/vegetables/carrots/2">Carrots</a></li>	
-</ul>
-<div id="root" ></div>
-<script type="text/javascript" src="pp-router.js?v=swuduedue" ></script>
+
+
+<script type="text/javascript" src="pp-router.min.js" ></script>
 <script type="text/javascript">
 	var root = document.getElementById("root");
 	var router = new ppRouter({
@@ -36,7 +53,17 @@
 	router.addRoute("/vegetables/:name(string)/:id(number)",
 		{
 			controller:function( params ){				
-				root.innerHTML = `<h1>vegetables ${params.name} : ${params.id} </h1>`;	
+				root.innerHTML = `<div class="card" style="max-width:360px;" >
+					<header class="header-card">
+						<p class="card-header-title">${params.name}</p>
+					</header>
+					<div class="card-content">
+    					<div class="content">
+							<h1>ID&nbsp;:&nbsp;${params.id}</h1>
+						</div>
+					</div>
+				</div>`
+				
 			}
 		}
 	);
