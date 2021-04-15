@@ -92,8 +92,8 @@ router.start();
 
 You can write exact routers, that's easy.
 
-but if you need dynamic routers do it as follows
-/customer/:id(number)
+but if you need dynamic routers do it as follows\n
+/customer/:id(number)\n
 /customer/:namecustomer(string)/:id(number)
 /customer/:nameAndId(any)
 
