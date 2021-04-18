@@ -1,7 +1,7 @@
 /*!!
  * Power Panel Router <https://github.com/carlos-sweb/pp-router>
  * @author Carlos Illesca
- * @version 1.0.6 (2020/04/15 00:46 AM)
+ * @version 1.0.7 (2020/04/15 00:46 AM)
  * Released under the MIT License
  */
 (function(global , factory ){
@@ -156,7 +156,7 @@
 							contructRegexp = contructRegexp.replace(ExecTemp[0],`/([0-9A-Za-z]{1,})`);
 						break;
 						case "string":
-							contructRegexp = contructRegexp.replace(ExecTemp[0],`/([A-Za-z]{1,})`);
+							contructRegexp = contructRegexp.replace(ExecTemp[0],`/([A-Za-z-_]{1,})`);
 						break;
 					}
 
