@@ -12,10 +12,10 @@ check the <a href="https://pp-router.netlify.app">Example</a>
 In the web project include pp-router.js with:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/pp-router.js@1.0.8/pp-router.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/pp-router.js@1.0.9/pp-router.min.js" ></script>
 ```
 
-Or 
+Or
 
 ## Install
 
@@ -28,12 +28,12 @@ npm i pp-router.js --save
 Simple Router for you Apps Client-Side
 ```html
 <ul>
-	<li><a href="#/">Incio</a></li>	
+	<li><a href="#/">Incio</a></li>
 </ul>
 <ul>
-	<li><a href="#/vegetables/artichokes/1">Artichokes</a></li>	
-	<li><a href="#/vegetables/onion/20">Onion</a></li>	
-	<li><a href="#/vegetables/carrots/2">Carrots</a></li>	
+	<li><a href="#/vegetables/artichokes/1">Artichokes</a></li>
+	<li><a href="#/vegetables/onion/20">Onion</a></li>
+	<li><a href="#/vegetables/carrots/2">Carrots</a></li>
 </ul>
 <div id="root" ></div>
 
@@ -56,15 +56,15 @@ var router = new ppRouter(
         controller:function(){
             root.innerHTML = `<h1>Route Remove</h1>`;
         }
-    }	
     }
-);	
+    }
+);
 
 // If you want to add another router
 router.addRoute("/vegetables/:name(string)/:id(number)",
     {
         controller:function( params ){				
-            root.innerHTML = `<h1>vegetables ${params.name} : ${params.id} </h1>`;	
+            root.innerHTML = `<h1>vegetables ${params.name} : ${params.id} </h1>`;
         }
     }
 );
@@ -72,7 +72,7 @@ router.addRoute("/vegetables/:name(string)/:id(number)",
 // If you want to remove any route
 router.removeRoute("/route-remove");
 
-// If you want to default redirect 
+// If you want to default redirect
 router.redirect("/");
 
 // If you want to default Function for noFound state
@@ -82,15 +82,15 @@ router.noFound = function( location ){
 }
 
 //getting enjoy you router
-router.start();	
+router.start();
 // if you want
-//router.start("/my-url-base");	
+//router.start("/my-url-base");
 
 ```
 
 ## Methods
 
-### router 
+### router
 
 You can write exact routers, that's easy.
 
@@ -104,20 +104,20 @@ there are three ways to get it :nameMyVar(number) , :nameMyVar(string) , :nameMy
 
 ### addRoute
 
-receives the name of the url and its object, see the example above 
+receives the name of the url and its object, see the example above
 
 ### removeRoute
 
 removes routing according to url
 
-### redirect 
+### redirect
 
-set a url for unmatched urls 
+set a url for unmatched urls
 
-### noFound 
+### noFound
 
 creates a function to execute in case of url mismatches
 
-### start 
+### start
 
 Function that initializes the analizis, you can also set a base url

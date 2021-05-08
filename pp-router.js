@@ -1,18 +1,19 @@
 /*!!
  * Power Panel Router <https://github.com/carlos-sweb/pp-router>
  * @author Carlos Illesca
- * @version 1.0.8 (2020/04/15 00:46 AM)
+ * @version 1.0.9 (2020/05/08 08:53 AM)
  * Released under the MIT License
  */
 (function(global , factory ){
-  	
+
   	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  	
+
   	typeof define === 'function' && define.amd ? define('ppRouter', factory) :
-	
+
 	(global = global || self, (function () {
-        
-    var exports = global.ppRouter = factory( ppView );    
+
+    var exports = typeof ppView === 'undefined' ?
+    global.ppRouter = factory() : global.ppRouter = factory(ppView);
 
 	}()
 
@@ -30,7 +31,7 @@
 			function isFunction(func) {
 				return func && {}.toString.call(func) === '[object Function]';
 			}
-		
+
 			/**
 			*@name routes
 			*@description : contenedor de roeuter provistos por el usuario
@@ -50,7 +51,7 @@
 			*@description - remueve un route al listado
 			*/
 			this.removeRoute = function( pattern ){
-				
+
 				var keys = Object.keys(this.routes);
 
 				for( var i = 0; i < keys.length ; i++  ){
@@ -74,8 +75,8 @@
 			*@description - Objecto que contiene si existen parametros en la url
 			*/
 			this.params = null;
-			// EVENTO QUE QUEDA ESCUCHANDO LOS CAMBIOS DE URL 
-			window.addEventListener('hashchange',function(){ this.run() }.bind(this));			
+			// EVENTO QUE QUEDA ESCUCHANDO LOS CAMBIOS DE URL
+			window.addEventListener('hashchange',function(){ this.run() }.bind(this));
 
 			/*
 			*@name redirect
@@ -87,37 +88,41 @@
 			*@name run
 			*@type Function
 			*@description  funcion que inicializa la primara
-			*verificacion de url			
+			*verificacion de url
 			*/
 			this.run = function(){
 				//una referencia local para el hash
-				var hash = this.location.hash;				
+				var hash = this.location.hash;
 				// validamos que el hash no entre vacio
 				if(hash === ""){
 					hash = hash+"/";
 					this.location.hash = "/";
 				}
-				// estramemos todas las llaves del router, 
+				// estramemos todas las llaves del router,
 				// vendian siendo la url a analizar
 				const keys = Object.keys( routes);
 
 				for( var i = 0; i < keys.length ; i++ ){
-					
+
 					// VERIFICAMOS QUE HALLA UNA COINCIDENCIA
 					const check = this.checkHash(hash,keys[i]);
-					// EN EL CASO QUE HALLA UNA CONCIDENCIA Y ADEMAS 
+					// EN EL CASO QUE HALLA UNA CONCIDENCIA Y ADEMAS
 					// SE HALLA PROPORCIONADO UN CONTROLADOR PARA ESTA URL
 					// SERA EJECUTADO CON LOS PARAMETROS CAPTURADOS
-					if( check && isFunction(this.routes[keys[i]].controller) ){
-					  if(isFunction(view)){
-					     var _view = new view(this.routes[keys[i]]);
-					     _view.controller(this.params);
-					  }else{
-					    this.routes[keys[i]].controller( this.params );
-					  }
-						break;
-					}
-					// LLEGAMOS HA ESTE PUNTO CUANDO NO HEMOS 
+
+          this.view = typeof view === 'undefined' ?
+          undefined : new view(this.routes[keys[i]]);
+
+          if( typeof this.view === 'undefined'  ){
+            if( check && isFunction(this.routes[keys[i]].controller) ){
+               this.routes[keys[i]].controller( this.params );
+            }
+          }else{
+            if( check && isFunction(view.controller) ){
+              view.controller(this.params)
+            }
+          }
+					// LLEGAMOS HA ESTE PUNTO CUANDO NO HEMOS
 					// NO HEMOS HALLADO NINGUNA COINCIDENCIA
 					//ES UN ESTADO noFound
 					if( (i+1) == keys.length ){
@@ -134,18 +139,18 @@
 			/*
 			*@name checkHash
 			*@type Function
-			*@description 
+			*@description
 			*/
 			this.checkHash = function( hash , pattern ){
 				//VALIDAMOS QUE LAS URL VENGAN EXACTAS - OMITIMOS URL QUE VENGAN CON PREFIGOS
 				if( hash.replace("#","") == pattern && pattern.indexOf(":") == -1 ){return true;};
-				// EXPRESION REGULAR				
-				const regex = /\/[(\:)]{1}([a-z,A-Z,0-9,\-,\_]{0,})[\(](string|any|number)[\)]/g;				
+				// EXPRESION REGULAR
+				const regex = /\/[(\:)]{1}([a-z,A-Z,0-9,\-,\_]{0,})[\(](string|any|number)[\)]/g;
 				// se inicia la expresion regular
 				var regexp = new RegExp( regex );
-				// empezamos a crear un regexp en base a los parametros añadidos en el match								
-				var contructRegexp = `^#`+pattern;				
-				// vamos a volcar en un grupo todos 
+				// empezamos a crear un regexp en base a los parametros añadidos en el match
+				var contructRegexp = `^#`+pattern;
+				// vamos a volcar en un grupo todos
 				// los aciertos o coincidencias
 				var group = [];
 				// VARIABLE TEMPORAL
@@ -154,7 +159,7 @@
 				while( ( ExecTemp = regexp.exec(pattern) ) != null ){
 					group.push(ExecTemp);
 					switch( ExecTemp[2] ){
-						case "number":								
+						case "number":
 							contructRegexp = contructRegexp.replace(ExecTemp[0],`/([0-9]{1,})`);
 						break;
 						case "any":
@@ -166,44 +171,44 @@
 					}
 
 				}
-				// AGREGAMOS $ PARA DETERMINAR LA EXPRESION REGULAR EXACTA				
+				// AGREGAMOS $ PARA DETERMINAR LA EXPRESION REGULAR EXACTA
 
 				contructRegexp = contructRegexp.replaceAll(`/`,`[\\/]{1}`);
 				contructRegexp = contructRegexp +`$`;
-				//YA ESTA CONSTRUIDA LA EXPRESION REGULAR PARA USAR								
-				var FinalRegexp = new RegExp(contructRegexp);					
-				// OBTENEMOS EL RESULTADO - SABEMOS QUE ES SOLO 1 SIN GRUPOS 
+				//YA ESTA CONSTRUIDA LA EXPRESION REGULAR PARA USAR
+				var FinalRegexp = new RegExp(contructRegexp);
+				// OBTENEMOS EL RESULTADO - SABEMOS QUE ES SOLO 1 SIN GRUPOS
 				var result = FinalRegexp.exec(hash);
-				// 
-				if(  !(result == null)  ){ 
-					// ESTOS SON LOS PARAMTEROS A DEVOLVER 
+				//
+				if(  !(result == null)  ){
+					// ESTOS SON LOS PARAMTEROS A DEVOLVER
 					// EN LA FUNCION
 					var params = new Object();
-					//CAPTURAMOS EL VALOR DEL PARAMTRO 
+					//CAPTURAMOS EL VALOR DEL PARAMTRO
 					//COMO VARIABLE
 					group.forEach((g,i)=>{
 						params[g[1]] = result[(i+1)];
 					});
-					//CREAMOS LOS PARAMS EN LOS PARAM GLOBALES					
+					//CREAMOS LOS PARAMS EN LOS PARAM GLOBALES
 					this.params = params;
 					// DEVOLVEMOS TRUE , ES CORRECTO
 					return true;
 				}else{
 					// ANULAMOS CUALQUIER PARAMS QUE SE HALLA QUEDADO
 					this.params = null;
-				}				
+				}
 				// retornamos falso
 				return false;
 			}
 			/*
 			*@name start
 			*@type Function
-			*@description - Esta funcion 
+			*@description - Esta funcion
 			*/
 			this.start = function(url){
 				if( typeof url == "string" ){ this.location.hash = url; }
 				this.run();
 			}
-	}			
-//--------------------	
-}));		
+	}
+//--------------------
+}));
