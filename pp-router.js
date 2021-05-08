@@ -1,7 +1,7 @@
 /*!!
  * Power Panel Router <https://github.com/carlos-sweb/pp-router>
  * @author Carlos Illesca
- * @version 1.0.7 (2020/04/15 00:46 AM)
+ * @version 1.0.8 (2020/04/15 00:46 AM)
  * Released under the MIT License
  */
 (function(global , factory ){
@@ -12,13 +12,13 @@
 	
 	(global = global || self, (function () {
         
-    var exports = global.ppRouter = factory();    
+    var exports = global.ppRouter = factory( ppView );    
 
 	}()
 
 ));
 
-})( this,(function() {
+})( this,(function( view ) {
 
 	return function(routes){
 			/*
@@ -109,7 +109,12 @@
 					// SE HALLA PROPORCIONADO UN CONTROLADOR PARA ESTA URL
 					// SERA EJECUTADO CON LOS PARAMETROS CAPTURADOS
 					if( check && isFunction(this.routes[keys[i]].controller) ){
-						this.routes[keys[i]].controller( this.params );
+					  if(isFunction(view)){
+					     var _view = new view(this.routes[keys[i]]);
+					     _view.controller(this.params);
+					  }else{
+					    this.routes[keys[i]].controller( this.params );
+					  }
 						break;
 					}
 					// LLEGAMOS HA ESTE PUNTO CUANDO NO HEMOS 
