@@ -1,7 +1,7 @@
 /*!!
  * Power Panel Router <https://github.com/carlos-sweb/pp-router>
  * @author Carlos Illesca
- * @version 1.1.0 (2020/05/08 08:53 AM)
+ * @version 1.1.1 (2020/05/08 21:47 PM)
  * Released under the MIT License
  */
 (function(global , factory ){
@@ -22,6 +22,10 @@
 })( this,(function( view ) {
 
 	return function(routes){
+
+      function isUndefined( obj ) {
+        return typeof obj === 'undefined';
+      }
 			/*
 			*@name isFunction
 			*@type Function
@@ -108,20 +112,28 @@
 					const check = this.checkHash(hash,keys[i]);
 					// EN EL CASO QUE HALLA UNA CONCIDENCIA Y ADEMAS
 					// SE HALLA PROPORCIONADO UN CONTROLADOR PARA ESTA URL
-					// SERA EJECUTADO CON LOS PARAMETROS CAPTURADOS
+				   // SERA EJECUTADO CON LOS PARAMETROS CAPTURADOS
+          // -------------------------------------------------------------------
+          // INREGRACIÓN DE PP-VIEW AL ROUTER
+          if( isUndefined( view )  ){
 
-          this.view = typeof view === 'undefined' ?
-          undefined : new view(this.routes[keys[i]]);
-
-          if( typeof this.view === 'undefined'  ){
             if( check && isFunction(this.routes[keys[i]].controller) ){
+
                this.routes[keys[i]].controller( this.params );
+
             }
+
           }else{
-            if( check && isFunction(view.controller) ){
-              view.controller(this.params)
+
+            this.view = new view(this.routes[keys[i]]);
+
+            if( check && isFunction(this.view.controller) ){
+                // se prodia en este punto agregar mas opciones si fuese necesario
+                this.view.controller( this.params );
             }
           }
+          // -------------------------------------------------------------------
+          // INREGRACIÓN DE PP-VIEW AL ROUTER
 					// LLEGAMOS HA ESTE PUNTO CUANDO NO HEMOS
 					// NO HEMOS HALLADO NINGUNA COINCIDENCIA
 					//ES UN ESTADO noFound

@@ -17,15 +17,15 @@
 		<aside class="menu column is-one-quarter" >
 			<p class="menu-label">General</p>
 			<ul class="menu-list">
-				<li><a href="#/home">Home</a></li>		
+				<li><a href="#/home">Home</a></li>
 			</ul>
 			<p class="menu-label">vegetables</p>
 			<ul class="menu-list">
-				<li><a href="#/vegetables/artichokes/1">Artichokes</a></li>	
-				<li><a href="#/vegetables/onion/20">Onion</a></li>	
-				<li><a href="#/vegetables/carrots/2">Carrots</a></li>			
+				<li><a href="#/vegetables/artichokes/1">Artichokes</a></li>
+				<li><a href="#/vegetables/onion/20">Onion</a></li>
+				<li><a href="#/vegetables/carrots/2">Carrots</a></li>
 			</ul>
-				
+
 			</aside>
 		<div id="root" class="column" ></div>
 	</div>
@@ -41,13 +41,13 @@
 			controller:function(params){
 				root.innerHTML = `<h1>Home</h1>`;
 			}
-		}	
-	});	
+		}
+	});
 
 
 	router.addRoute("/vegetables/:name(string)/:id(number)",
 		{
-			controller:function( params ){				
+			controller:function( params ){
 				root.innerHTML = `<div class="card" style="max-width:360px;" >
 					<header class="header-card">
 						<p class="card-header-title">${params.name}</p>
@@ -58,7 +58,7 @@
 						</div>
 					</div>
 				</div>`
-				
+
 			}
 		}
 	);
@@ -66,9 +66,8 @@
 
 	router.removeRoute("/otro");
 
+	router.start();
 	
-
-	router.start();	
-</script>	
+</script>
 </body>
 </html>
