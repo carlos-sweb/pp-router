@@ -20,6 +20,7 @@
 				<li><a href="#/home">Home</a></li>
 			</ul>
 			<p class="menu-label">vegetables</p>
+
 			<ul class="menu-list">
 				<li><a href="#/vegetables/artichokes/1">Artichokes</a></li>
 				<li><a href="#/vegetables/onion/20">Onion</a></li>
@@ -33,7 +34,7 @@
 
 
 
-<script type="text/javascript" src="pp-router.min.js" ></script>
+<script type="text/javascript" src="pp-router.js" ></script>
 <script type="text/javascript">
 	var root = document.getElementById("root");
 	var router = new ppRouter({
@@ -62,12 +63,8 @@
 			}
 		}
 	);
-
-
 	router.removeRoute("/otro");
-
 	router.start();
-	
 </script>
 </body>
 </html>

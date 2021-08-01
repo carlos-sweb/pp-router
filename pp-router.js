@@ -1,7 +1,7 @@
 /*!!
  * Power Panel Router <https://github.com/carlos-sweb/pp-router>
  * @author Carlos Illesca
- * @version 1.1.1 (2020/05/08 21:47 PM)
+ * @version 2.1.1 (2020/07/31 23:35 PM)
  * Released under the MIT License
  */
 (function(global , factory ){
@@ -95,6 +95,9 @@
 			*verificacion de url
 			*/
 			this.run = function(){
+
+        // Contenedor de los maches
+        var matchesUrl = [];
 				//una referencia local para el hash
 				var hash = this.location.hash;
 				// validamos que el hash no entre vacio
@@ -102,8 +105,8 @@
 					hash = hash+"/";
 					this.location.hash = "/";
 				}
-				// estramemos todas las llaves del router,
-				// vendian siendo la url a analizar
+        // ESTRAEMOS TODAS LAS LLAVES DEL ROUTER,
+				// VENDRIAN SIENDO LAS URL A ANALIZAR
 				const keys = Object.keys( routes);
 
 				for( var i = 0; i < keys.length ; i++ ){
@@ -114,39 +117,41 @@
 					// SE HALLA PROPORCIONADO UN CONTROLADOR PARA ESTA URL
 				   // SERA EJECUTADO CON LOS PARAMETROS CAPTURADOS
           // -------------------------------------------------------------------
-          // INREGRACIÓN DE PP-VIEW AL ROUTER
-          if( isUndefined( view )  ){
-
-            if( check && isFunction(this.routes[keys[i]].controller) ){
-
-               this.routes[keys[i]].controller( this.params );
-
+            if( check.success && isFunction(this.routes[keys[i]].controller) ){
+               matchesUrl.push( check );
             }
-
-          }else{
-
-            this.view = new view(this.routes[keys[i]]);
-
-            if( check && isFunction(this.view.controller) ){
-                // se prodia en este punto agregar mas opciones si fuese necesario
-                this.view.controller( this.params );
+				}// FOR
+        // CUANDO NO HAY COINCIDENCIAS EN EL LA URL
+        if( matchesUrl.length === 0 ){
+            if( isFunction( this.noFound ) ){ this.noFound( this.localtion );  }
+            if( typeof this.url_redirect == "string" ){
+              this.location.hash = this.url_redirect;
             }
-          }
-          // -------------------------------------------------------------------
-          // INREGRACIÓN DE PP-VIEW AL ROUTER
-					// LLEGAMOS HA ESTE PUNTO CUANDO NO HEMOS
-					// NO HEMOS HALLADO NINGUNA COINCIDENCIA
-					//ES UN ESTADO noFound
-					if( (i+1) == keys.length ){
-						// si esta la funcion noFound se ejecuta
-						if( isFunction(this.noFound) ){ this.noFound( this.location );  }
-						if( typeof this.url_redirect == "string" ){
-							this.location.hash = this.url_redirect;
-						}
-					}
-
-				}
-
+        }
+        // CUANDO NO HAY COINCIDENCIAS EN EL LA URL
+        // CUANDO POR LO MENOS HAY UNA COINCIDENCIA
+        if( matchesUrl.length > 0 ){
+            /*
+            NOTA : EN ESTE PUNTO PODEMOS MEJORAR LA PRIORIDAD
+            CUANDO LOS MATCH TIENE LA MISMA CANTIDAD DE "DINAMIC"
+            */
+            // contenedor del numero de url dinamicas tiene los match
+            var dinamic = [];
+            for( var i = 0; i < matchesUrl.length ; i++ ){
+              dinamic.push( matchesUrl[i].dinamic );
+            }
+            // ontenemos el valor minimo
+            var min = Math.min(...dinamic);
+            // Buscamos el index en el array
+            var indexOf = dinamic.indexOf(min);
+            // encontramos el pattern exacto
+            var patternMatch =  matchesUrl[indexOf].pattern;
+            // establecemos los paramtetros en el objeto
+            this.params = matchesUrl[indexOf].params;
+            // Ejecutamos la funcion unica
+            this.routes[ patternMatch ].controller( matchesUrl[indexOf].params );
+        }
+        // CUANDO POR LO MENOS HAY UNA COINCIDENCIA
 			}
 			/*
 			*@name checkHash
@@ -154,8 +159,9 @@
 			*@description
 			*/
 			this.checkHash = function( hash , pattern ){
+        var dinamic = 0;
 				//VALIDAMOS QUE LAS URL VENGAN EXACTAS - OMITIMOS URL QUE VENGAN CON PREFIGOS
-				if( hash.replace("#","") == pattern && pattern.indexOf(":") == -1 ){return true;};
+				if( hash.replace("#","") == pattern && pattern.indexOf(":") == -1 ){ return {'success':true , 'dinamic':dinamic , 'pattern' : pattern , 'params': {} }; };
 				// EXPRESION REGULAR
 				const regex = /\/[(\:)]{1}([a-z,A-Z,0-9,\-,\_]{0,})[\(](string|any|number)[\)]/g;
 				// se inicia la expresion regular
@@ -173,12 +179,15 @@
 					switch( ExecTemp[2] ){
 						case "number":
 							contructRegexp = contructRegexp.replace(ExecTemp[0],`/([0-9]{1,})`);
+              dinamic++;
 						break;
 						case "any":
 							contructRegexp = contructRegexp.replace(ExecTemp[0],`/([0-9A-Za-z]{1,})`);
+              dinamic++;
 						break;
 						case "string":
 							contructRegexp = contructRegexp.replace(ExecTemp[0],`/([A-Za-z-_]{1,})`);
+              dinamic++;
 						break;
 					}
 
@@ -202,16 +211,19 @@
 						params[g[1]] = result[(i+1)];
 					});
 					//CREAMOS LOS PARAMS EN LOS PARAM GLOBALES
-					this.params = params;
+					//   this.params = params;
+
 					// DEVOLVEMOS TRUE , ES CORRECTO
-					return true;
+					return {'success':true , 'dinamic':dinamic, 'pattern' : pattern ,'params': params }
 				}else{
 					// ANULAMOS CUALQUIER PARAMS QUE SE HALLA QUEDADO
 					this.params = null;
 				}
 				// retornamos falso
-				return false;
+				return {'success':false}
 			}
+
+
 			/*
 			*@name start
 			*@type Function
