@@ -1,7 +1,7 @@
 /*!!
  * Power Panel Router <https://github.com/carlos-sweb/pp-router>
  * @author Carlos Illesca
- * @version 2.1.1 (2020/07/31 23:35 PM)
+ * @version 2.1.2 (2020/07/31 23:41 PM)
  * Released under the MIT License
  */
 (function(global , factory ){
