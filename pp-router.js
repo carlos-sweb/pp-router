@@ -22,7 +22,6 @@
 })( this,(function( ppIs ) {
 
 	return function(routes){
-
 			/**
 			*@name routes
 			*@description : contenedor de roeuter provistos por el usuario
@@ -212,14 +211,14 @@
 			*@type Function
 			*@description - Esta funcion
 			*/
-			this.start = function(url){
+			this.start = function( url ){
 
         ppIs.isString(url,function( u ){
           this.location.hash = u;
         }.bind(this));
 
 				this.run();
-        
+
 			}
 	}
 //--------------------
