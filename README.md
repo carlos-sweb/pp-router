@@ -1,9 +1,5 @@
 # pp-router.js
 
-```console
-npm i pp-router.js --save
-```
-
 check the <a href="https://pp-router.netlify.app">Example</a>
 
 
