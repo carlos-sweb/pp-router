@@ -1,7 +1,7 @@
 /*!!
  * Power Panel Router <https://github.com/carlos-sweb/pp-router>
  * @author Carlos Illesca
- * @version 2.1.2 (2020/07/31 23:41 PM)
+ * @version 2.1.3 (2020/08/09 23:34 PM)
  * Released under the MIT License
  */
 (function(global , factory ){
@@ -12,29 +12,16 @@
 
 	(global = global || self, (function () {
 
-    var exports = typeof ppView === 'undefined' ?
-    global.ppRouter = factory() : global.ppRouter = factory(ppView);
+    var exports = typeof ppIs === 'undefined' ?
+    global.ppRouter = factory() : global.ppRouter = factory( ppIs )
 
 	}()
 
 ));
 
-})( this,(function( view ) {
+})( this,(function( ppIs ) {
 
 	return function(routes){
-
-      function isUndefined( obj ) {
-        return typeof obj === 'undefined';
-      }
-			/*
-			*@name isFunction
-			*@type Function
-			*@description es una funcion que verifica is el parametro
-			*entregado es una funcion
-			*/
-			function isFunction(func) {
-				return func && {}.toString.call(func) === '[object Function]';
-			}
 
 			/**
 			*@name routes
@@ -55,9 +42,7 @@
 			*@description - remueve un route al listado
 			*/
 			this.removeRoute = function( pattern ){
-
 				var keys = Object.keys(this.routes);
-
 				for( var i = 0; i < keys.length ; i++  ){
 					if( keys[i] == pattern ){
 						delete this.routes[pattern];
@@ -117,13 +102,13 @@
 					// SE HALLA PROPORCIONADO UN CONTROLADOR PARA ESTA URL
 				   // SERA EJECUTADO CON LOS PARAMETROS CAPTURADOS
           // -------------------------------------------------------------------
-            if( check.success && isFunction(this.routes[keys[i]].controller) ){
+            if( check.success && ppIs.isFunction(this.routes[keys[i]].controller) ){
                matchesUrl.push( check );
             }
 				}// FOR
         // CUANDO NO HAY COINCIDENCIAS EN EL LA URL
         if( matchesUrl.length === 0 ){
-            if( isFunction( this.noFound ) ){ this.noFound( this.localtion );  }
+            if( ppIs.isFunction( this.noFound ) ){ this.noFound( this.localtion );  }
             if( typeof this.url_redirect == "string" ){
               this.location.hash = this.url_redirect;
             }
@@ -222,16 +207,19 @@
 				// retornamos falso
 				return {'success':false}
 			}
-
-
 			/*
 			*@name start
 			*@type Function
 			*@description - Esta funcion
 			*/
 			this.start = function(url){
-				if( typeof url == "string" ){ this.location.hash = url; }
+
+        ppIs.isString(url,function( u ){
+          this.location.hash = u;
+        }.bind(this));
+
 				this.run();
+        
 			}
 	}
 //--------------------

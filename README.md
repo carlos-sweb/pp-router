@@ -1,6 +1,6 @@
 # pp-router.js
 
-```
+```console
 npm i pp-router.js --save
 ```
 
@@ -11,7 +11,7 @@ check the <a href="https://pp-router.netlify.app">Example</a>
 
 In the web project include pp-router.js with:
 
-```
+```javascript
 <script src="https://cdn.jsdelivr.net/npm/pp-router.js@2.1.2/pp-router.min.js" ></script>
 ```
 

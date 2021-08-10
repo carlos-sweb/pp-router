@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/carlos-sweb/pp-router/issues"
   },
-  "homepage": "https://github.com/carlos-sweb/pp-router#readme"
+  "homepage": "https://github.com/carlos-sweb/pp-router#readme",
+  "dependencies": {
+    "pp-is": "^1.0.0"
+  }
 }
