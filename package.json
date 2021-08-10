@@ -1,6 +1,6 @@
 {
   "name": "pp-router.js",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "Simple Router for javascript",
   "main": "pp-router.js",
   "scripts": {
