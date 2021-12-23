@@ -1,7 +1,7 @@
 /*!!
  * Power Panel Router <https://github.com/carlos-sweb/pp-router>
  * @author Carlos Illesca
- * @version 2.1.6 (2020/08/09 23:34 PM)
+ * @version 2.1.7 (2021/12/23 11:35 AM)
  * Released under the MIT License
  */
 (function(global , factory ){
@@ -22,6 +22,12 @@
 })( this,(function( ppIs ) {
 
 	return function(routes){
+      /**
+       *@name current_hash
+       *@description : contiene el hash activo y
+       * descuvierto en el analisis
+       **/
+      this.current_hash = null;
 			/**
 			*@name routes
 			*@description : contenedor de roeuter provistos por el usuario
@@ -133,7 +139,11 @@
             // establecemos los paramtetros en el objeto
             this.params = matchesUrl[indexOf].params;
             // Ejecutamos la funcion unica
-            this.routes[ patternMatch ].controller( matchesUrl[indexOf].params );
+            // verificacion que el current_hash no se duplique
+            if(patternMatch != this.current_hash  ){
+              this.routes[ patternMatch ].controller( matchesUrl[indexOf].params );
+              this.current_hash = patternMatch;
+            }
         }
         // CUANDO POR LO MENOS HAY UNA COINCIDENCIA
 			}
