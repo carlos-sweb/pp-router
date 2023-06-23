@@ -1,7 +1,7 @@
 /*!!
  * Power Panel Router <https://github.com/carlos-sweb/pp-router>
  * @author Carlos Illesca
- * @version 2.1.7 (2021/12/23 11:35 AM)
+ * @version 2.1.8 (2022/06/21 21:22 PM)
  * Released under the MIT License
  */
 (function(global , factory ){
@@ -49,7 +49,7 @@
 			this.removeRoute = function( pattern ){
 				var keys = Object.keys(this.routes);
 				for( var i = 0; i < keys.length ; i++  ){
-					if( keys[i] == pattern ){
+					if( keys[i] === pattern ){
 						delete this.routes[pattern];
 						break;
 					}
@@ -101,20 +101,21 @@
 
 				for( var i = 0; i < keys.length ; i++ ){
 
-					// VERIFICAMOS QUE HALLA UNA COINCIDENCIA
+					// VERIFICAMOS QUE HALLA UNA COINCIDENCIA				
 					const check = this.checkHash(hash,keys[i]);
 					// EN EL CASO QUE HALLA UNA CONCIDENCIA Y ADEMAS
 					// SE HALLA PROPORCIONADO UN CONTROLADOR PARA ESTA URL
 				   // SERA EJECUTADO CON LOS PARAMETROS CAPTURADOS
           // -------------------------------------------------------------------
+	    
             if( check.success && ppIs.isFunction(this.routes[keys[i]].controller) ){
                matchesUrl.push( check );
             }
 				}// FOR
         // CUANDO NO HAY COINCIDENCIAS EN EL LA URL
         if( matchesUrl.length === 0 ){
-            if( ppIs.isFunction( this.noFound ) ){ this.noFound( this.localtion );  }
-            if( typeof this.url_redirect == "string" ){
+            if( ppIs.isFunction( this.noFound ) ){ this.noFound( this.location );  }
+            if( typeof this.url_redirect === "string" ){
               this.location.hash = this.url_redirect;
             }
         }
@@ -140,10 +141,10 @@
             this.params = matchesUrl[indexOf].params;
             // Ejecutamos la funcion unica
             // verificacion que el current_hash no se duplique
-            if(patternMatch != this.current_hash  ){
-              this.routes[ patternMatch ].controller( matchesUrl[indexOf].params );
+           /* if(patternMatch != this.current_hash  ){*/
+              this.routes[ patternMatch ].controller( matchesUrl[indexOf].params);
               this.current_hash = patternMatch;
-            }
+           /* }*/
         }
         // CUANDO POR LO MENOS HAY UNA COINCIDENCIA
 			}
@@ -155,7 +156,7 @@
 			this.checkHash = function( hash , pattern ){
         var dinamic = 0;
 				//VALIDAMOS QUE LAS URL VENGAN EXACTAS - OMITIMOS URL QUE VENGAN CON PREFIGOS
-				if( hash.replace("#","") == pattern && pattern.indexOf(":") == -1 ){ return {'success':true , 'dinamic':dinamic , 'pattern' : pattern , 'params': {} }; };
+				if( hash.replace("#","") === pattern && pattern.indexOf(":") === -1 ){ return {'success':true , 'dinamic':dinamic , 'pattern' : pattern , 'params': {} }; };
 				// EXPRESION REGULAR
 				const regex = /\/[(\:)]{1}([a-z,A-Z,0-9,\-,\_]{0,})[\(](string|any|number)[\)]/g;
 				// se inicia la expresion regular
@@ -195,7 +196,7 @@
 				// OBTENEMOS EL RESULTADO - SABEMOS QUE ES SOLO 1 SIN GRUPOS
 				var result = FinalRegexp.exec(hash);
 				//
-				if(  !(result == null)  ){
+				if(  !(result === null)  ){
 					// ESTOS SON LOS PARAMTEROS A DEVOLVER
 					// EN LA FUNCION
 					var params = new Object();

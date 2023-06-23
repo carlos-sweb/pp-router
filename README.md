@@ -9,7 +9,7 @@ In the web project include pp-router.js with:
 
 ```javascript
 <script src="https://cdn.jsdelivr.net/npm/pp-is@latest/pp-is.min.js" ></script>
-<script src="https://cdn.jsdelivr.net/npm/pp-router.js@2.1.7/pp-router.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/pp-router.js@2.1.8/pp-router.min.js" ></script>
 ```
 
 Or
